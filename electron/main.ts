@@ -1,4 +1,4 @@
-import { app, BrowserWindow, dialog } from 'electron';
+import { app, BrowserWindow, dialog, Menu } from 'electron';
 import * as path from 'path';
 import * as isDev from 'electron-is-dev';
 import * as fs from 'fs';
@@ -12,6 +12,51 @@ const log = (message: string, ...args: any[]) => {
 // 전역 참조를 유지하여 JavaScript 가비지 컬렉션이 자동으로 창을 닫지 않도록 합니다.
 let mainWindow: BrowserWindow | null;
 
+// 기본 메뉴 생성 함수
+function createMenu(): void {
+  const template = [
+    {
+      label: '파일',
+      submenu: [
+        { role: 'quit', label: '종료' }
+      ]
+    },
+    {
+      label: '보기',
+      submenu: [
+        { role: 'reload', label: '새로고침' },
+        { role: 'forceReload', label: '강제 새로고침' },
+        { role: 'toggleDevTools', label: '개발자 도구' },
+        { type: 'separator' },
+        { role: 'resetZoom', label: '확대/축소 초기화' },
+        { role: 'zoomIn', label: '확대' },
+        { role: 'zoomOut', label: '축소' },
+        { type: 'separator' },
+        { role: 'togglefullscreen', label: '전체화면 전환' }
+      ]
+    },
+    {
+      label: '도움말',
+      submenu: [
+        {
+          label: '프로모션 웹 빌더 정보',
+          click: async () => {
+            dialog.showMessageBox({
+              title: '프로모션 웹 빌더 정보',
+              message: '프로모션 웹 빌더',
+              detail: '버전 1.0.0\n© 2023 웹 빌더 팀'
+            });
+          }
+        }
+      ]
+    }
+  ];
+
+  const menu = Menu.buildFromTemplate(template as any);
+  Menu.setApplicationMenu(menu);
+  log('Application menu has been created and set');
+}
+
 function createWindow(): void {
   log('Creating main window...');
   // 브라우저 창을 생성합니다.
@@ -24,6 +69,12 @@ function createWindow(): void {
       preload: path.join(__dirname, 'preload.js')
     }
   });
+
+  // 메뉴바 생성 및 설정
+  createMenu();
+
+  // 로그 메시지 변경
+  log('Window created in windowed mode with menu bar');
 
   // 개발 환경과 프로덕션 환경에서의 경로 설정
   let indexPath: string;
