@@ -1,10 +1,13 @@
 import styled from "@emotion/styled";
 import { LeftSidebar } from "./components/LeftSidebar";
 import { RightSidebar } from "./components/RightSidebar";
+import { Promotion } from "./components/Promotion";
+
 const MainPage = () => {
   return (
     <MainContainer>
       <LeftSidebar />
+      <Promotion />
       <RightSidebar />
     </MainContainer>
   );
