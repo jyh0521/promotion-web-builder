@@ -7,7 +7,7 @@
   "scripts": {
     "start": "concurrently \"yarn start:react\" \"yarn start:electron\"",
     "start:react": "cross-env BROWSER=none react-scripts start",
-    "start:electron": "wait-on http://localhost:3000 && tsc -p electron && electron .",
+    "start:electron": "yarn build && tsc -p electron && electron .",
     "build": "react-scripts build",
     "build:electron": "tsc -p electron",
     "clean": "rimraf dist release",
@@ -52,7 +52,7 @@
   },
   "build": {
     "appId": "com.example.react-electron-app",
-    "productName": "ReactElectronApp",
+    "productName": "프로모션 웹 빌더",
     "extends": null,
     "asar": false,
     "files": [

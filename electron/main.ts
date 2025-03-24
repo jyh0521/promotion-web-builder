@@ -61,7 +61,7 @@ function createWindow(): void {
   log('Creating main window...');
   // 브라우저 창을 생성합니다.
   mainWindow = new BrowserWindow({
-    width: 1024,
+    width: 1366,
     height: 768,
     webPreferences: {
       nodeIntegration: true,
@@ -103,7 +103,7 @@ function createWindow(): void {
               log('Successfully connected to React development server');
               
               // 개발자 도구를 엽니다
-              mainWindow?.webContents.openDevTools();
+              // mainWindow?.webContents.openDevTools();
             })
             .catch(err => {
               log(`Failed to connect on attempt ${attempts}:`, err);
