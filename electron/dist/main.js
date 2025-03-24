@@ -153,7 +153,7 @@ function createWindow() {
     var runningInDev = isDev && !isPackaged;
     if (runningInDev) {
         // 개발 모드에서는 React 개발 서버 URL을 사용
-        indexPath = 'http://localhost:3000';
+        indexPath = 'http://localhost:5000';
         log('Running in development mode, using URL:', indexPath);
         // React 서버 연결 테스트 (실패 시 오류 메시지 표시)
         try {

@@ -1,5 +1,5 @@
 {
-  "name": "react-electron-boilerplate",
+  "name": "promotion-web-builder",
   "version": "1.0.0",
   "description": "React와 Electron을 함께 사용하는 보일러플레이트",
   "main": "electron/dist/main.js",
@@ -24,7 +24,6 @@
     "eject": "react-scripts eject"
   },
   "author": "",
-  "license": "MIT",
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@testing-library/jest-dom": "^5.16.5",
