@@ -1,13 +1,16 @@
-import { FileImageOutlined, LineOutlined } from "@ant-design/icons";
-import styled from "@emotion/styled";
+import { FileImageOutlined, LineOutlined } from '@ant-design/icons';
+import styled from '@emotion/styled';
+import { usePromotionStore } from '../../../store/usePromotionStore';
 
 export const Toolbar = () => {
+  const { addImage } = usePromotionStore();
+
   return (
     <ToolbarContainer>
       <ToolbarButton>
         <LineOutlined style={{ fontSize: 24 }} />
       </ToolbarButton>
-      <ToolbarButton>
+      <ToolbarButton onClick={addImage}>
         <FileImageOutlined style={{ fontSize: 24 }} />
       </ToolbarButton>
     </ToolbarContainer>
@@ -17,7 +20,7 @@ export const Toolbar = () => {
 const ToolbarContainer = styled.div`
   width: 150px;
   height: 48px;
-  background-color: #ffffff;
+  background-color: #00bed6;
 
   border-radius: 10px;
 
@@ -32,6 +35,8 @@ const ToolbarContainer = styled.div`
   padding: 0 12px;
 
   gap: 12px;
+
+  z-index: 100;
 `;
 
 const ToolbarButton = styled.div`

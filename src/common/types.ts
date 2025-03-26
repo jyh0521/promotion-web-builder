@@ -1,8 +1,6 @@
 export interface PromotionType {
-  blocks: Record<
-    number,
-    Header | Container | Image | Button | Modal | Snackbar | Carousel
-  >;
+  name: string;
+  blocks: Record<number, ContainerType | HeaderType | ImageType | ButtonType | ModalType | SnackbarType | CarouselType>;
   events: Record<number, ClickEvent>;
   conditions: Record<number, NewbieCondition>;
   actions: Record<number, CouponDownAction>;
@@ -10,35 +8,35 @@ export interface PromotionType {
 
 // Block
 interface Block {
-  id: number;
-  width: number;
-  height: number;
-  children: number[];
+  blockId: number;
+  width?: number;
+  height?: number;
   left?: number | string;
   right?: number | string;
   top?: number | string;
   bottom?: number | string;
 }
 
-interface Header extends Block {
-  type: "header";
+export interface ContainerType extends Block {
+  type: 'container';
+  children: number[];
+}
+
+interface HeaderType extends Block {
+  type: 'header';
   showYn: boolean;
   backgroundColor: string;
-  closeIconType: "close" | "back";
-  closeIconColor: "black" | "white";
+  closeIconType: 'close' | 'back';
+  closeIconColor: 'black' | 'white';
 }
 
-interface Container extends Block {
-  type: "container";
+export interface ImageType extends Block {
+  type: 'image';
+  url: string;
 }
 
-interface Image extends Block {
-  type: "image";
-  imageUrl: string;
-}
-
-interface Button extends Block {
-  type: "button";
+interface ButtonType extends Block {
+  type: 'button';
   text: string;
   fontSize: number;
   fontWeight: number;
@@ -54,52 +52,105 @@ interface Button extends Block {
   canChangeState: boolean;
 }
 
-interface Modal extends Block {
+interface ModalType extends Block {
   // 모달은 container와 image와 button을 조합해서 만들 수 있음
+  type: 'modal';
 }
 
-interface Snackbar extends Block {
-  type: "snackbar";
+interface SnackbarType extends Block {
+  type: 'snackbar';
   message: string;
 }
 
-interface Carousel extends Block {
-  type: "carousel";
+interface CarouselType extends Block {
+  type: 'carousel';
 }
 
 // Event
 interface Event {
-  id: number;
+  eventId: number;
   blockId: number;
   condition: number[];
   conditionAction: {
-    true: number[];
-    false: number[];
+    true: ConditionAction;
+    false: ConditionAction;
   };
 }
 
+interface ConditionAction {
+  firstActionId: number;
+  secondActionId: number;
+}
+
 interface ClickEvent extends Event {
-  type: "click";
+  type: 'click';
   action: number[];
 }
 
 // Condition
 interface Condition {
+  conditionId: number;
   child: number[];
   eventId?: number;
   blockId?: number;
 }
 
+interface TrueCondition extends Condition {
+  type: 'true';
+}
+
 interface NewbieCondition extends Condition {
-  type: "newbie";
+  type: 'newbie';
+}
+
+interface MarketingCondition extends Condition {
+  type: 'marketing';
 }
 
 // Action
 interface Action {
-  id: number;
+  actionId: number;
 }
 
 interface CouponDownAction extends Action {
-  type: "couponDown";
-  couponId: number[];
+  type: 'couponDown';
+  couponCampaignIds: number[];
+}
+
+interface MarketingAgreeAction extends Action {
+  type: 'marketingAgree';
+}
+
+interface CopyAction extends Action {
+  type: 'copy';
+}
+
+interface ShareAction extends Action {
+  type: 'share';
+}
+
+interface ExternalWebAction extends Action {
+  type: 'externalWeb';
+}
+
+interface AddCouponAction extends Action {
+  type: 'addCoupon';
+}
+
+interface ReservationAction extends Action {
+  type: 'reservation';
+  category: 'HOUSE' | 'OFFICE' | 'MOVING';
+}
+
+interface ModalAction extends Action {
+  type: 'modal';
+}
+
+interface SnackbarAction extends Action {
+  type: 'snackbar';
+}
+
+interface ModalSnackbarAction extends Action {
+  modalUrl: '';
+  snackbarMessage: '';
 }
