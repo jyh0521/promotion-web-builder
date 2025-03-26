@@ -139,7 +139,6 @@ interface AddCouponAction extends Action {
 
 interface ReservationAction extends Action {
   type: 'reservation';
-  category: 'HOUSE' | 'OFFICE' | 'MOVING';
 }
 
 interface ModalAction extends Action {
