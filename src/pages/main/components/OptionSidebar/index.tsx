@@ -2,16 +2,28 @@ import styled from '@emotion/styled';
 import { ImageOptions } from './ImageOptions';
 import { useSelectedBlockIdStore } from '@/store/useSelectedBlockIdStore';
 import { usePromotionStore } from '@/store/usePromotionStore';
+import { ButtonOptions } from './ButtonOptios';
 
 export const OptionSidebar = () => {
-  const { selectedBlockId } = useSelectedBlockIdStore();
   const { promotion } = usePromotionStore();
+  const { selectedBlockId } = useSelectedBlockIdStore();
 
   if (!selectedBlockId) return <OptionSidebarContainer />;
 
-  const selectedBlock = promotion.blocks[selectedBlockId];
-
-  return <OptionSidebarContainer>{selectedBlockId && <ImageOptions />}</OptionSidebarContainer>;
+  return (
+    <OptionSidebarContainer>
+      {(() => {
+        switch (promotion.blocks[selectedBlockId].type) {
+          case 'image':
+            return <ImageOptions />;
+          case 'button':
+            return <ButtonOptions />;
+          default:
+            return null;
+        }
+      })()}
+    </OptionSidebarContainer>
+  );
 };
 
 const OptionSidebarContainer = styled.div`

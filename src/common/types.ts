@@ -15,13 +15,12 @@ interface Block {
   right?: number | string;
   top?: number | string;
   bottom?: number | string;
+  nodes?: number[];
 }
 
 export interface ContainerType extends Block {
   type: 'container';
-  children: number[];
 }
-
 interface HeaderType extends Block {
   type: 'header';
   showYn: boolean;
@@ -35,7 +34,7 @@ export interface ImageType extends Block {
   url: string;
 }
 
-interface ButtonType extends Block {
+export interface ButtonType extends Block {
   type: 'button';
   text: string;
   fontSize: number;
