@@ -40,7 +40,7 @@ export interface ButtonType extends Block {
   fontSize: number;
   fontWeight: number;
   lineHeight: number;
-  boderRadius: number;
+  borderRadius: number;
   backgroudColor: string;
   disabled: boolean; // default false
   color: string;

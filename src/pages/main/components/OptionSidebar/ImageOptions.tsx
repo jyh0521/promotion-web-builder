@@ -28,7 +28,7 @@ export const ImageOptions = () => {
         </Descriptions.Item>
       </Descriptions>
       <Descriptions title="Layout" bordered style={{ textAlign: 'left' }} column={1}>
-        <Descriptions.Item label="Width">
+        <Descriptions.Item label="width">
           <InputNumber
             value={selectedBlock.width}
             onChange={(value) => {
@@ -40,7 +40,7 @@ export const ImageOptions = () => {
             disabled={true}
           />
         </Descriptions.Item>
-        <Descriptions.Item label="Height">
+        <Descriptions.Item label="height">
           <InputNumber
             value={selectedBlock.height}
             onChange={(value) => {

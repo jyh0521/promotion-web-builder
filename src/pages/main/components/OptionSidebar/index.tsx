@@ -32,4 +32,6 @@ const OptionSidebarContainer = styled.div`
   background-color: #ffffff;
 
   padding: 24px;
+
+  overflow-y: auto;
 `;

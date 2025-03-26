@@ -7,6 +7,7 @@ interface PromotionStore {
   addImage: () => void;
   updateImage: (imageBlock: ImageType) => void;
   addButton: (selectedBlockId: number) => void;
+  updateButton: (buttonBlock: ButtonType) => void;
 }
 
 export const usePromotionStore = create<PromotionStore>((set) => ({
@@ -62,7 +63,7 @@ export const usePromotionStore = create<PromotionStore>((set) => ({
           fontSize: 17,
           fontWeight: 600,
           lineHeight: 140,
-          boderRadius: 8,
+          borderRadius: 8,
           color: '#FFFFFF',
           backgroudColor: '#00bed6',
           disabled: false,
@@ -75,4 +76,11 @@ export const usePromotionStore = create<PromotionStore>((set) => ({
       }),
     );
   },
+
+  updateButton: (buttonBlock: ButtonType) =>
+    set(
+      produce((state) => {
+        state.promotion.blocks[buttonBlock.blockId] = buttonBlock;
+      }),
+    ),
 }));

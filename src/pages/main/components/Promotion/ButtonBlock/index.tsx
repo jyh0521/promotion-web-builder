@@ -21,6 +21,9 @@ export const ButtonBlock = ({ buttonBlock, selected, totalWidth, totalHeight }: 
   return (
     <AbsoluteDivButton
       selected={selected}
+      fontSize={buttonBlock.fontSize}
+      fontWeight={buttonBlock.fontWeight}
+      lineHeight={buttonBlock.lineHeight}
       left={buttonBlock.left as number}
       right={buttonBlock.right as number}
       top={buttonBlock.top as number}
@@ -29,7 +32,7 @@ export const ButtonBlock = ({ buttonBlock, selected, totalWidth, totalHeight }: 
       height={buttonBlock.height as number}
       totalWidth={totalWidth}
       totalHeight={totalHeight}
-      boderRadius={buttonBlock.boderRadius}
+      borderRadius={buttonBlock.borderRadius}
       backgroudColor={buttonBlock.backgroudColor}
       color={buttonBlock.color}
       hoverBackgroundColor={buttonBlock.hoverBackgroundColor}
@@ -44,6 +47,9 @@ export const ButtonBlock = ({ buttonBlock, selected, totalWidth, totalHeight }: 
 };
 
 const AbsoluteDivButton = styled(BlockContainer)<{
+  fontSize?: number;
+  fontWeight?: number;
+  lineHeight?: number;
   left?: number;
   top?: number;
   right?: number;
@@ -52,7 +58,7 @@ const AbsoluteDivButton = styled(BlockContainer)<{
   height?: number;
   totalWidth: number;
   totalHeight: number;
-  boderRadius?: number;
+  borderRadius?: number;
   backgroudColor?: string;
   color?: string;
   hoverBackgroundColor?: string;
@@ -66,6 +72,10 @@ const AbsoluteDivButton = styled(BlockContainer)<{
   justify-content: center;
 
   position: absolute;
+
+  ${({ fontSize }) => fontSize && `font-size: ${fontSize}px`};
+  ${({ fontWeight }) => fontWeight && `font-weight: ${fontWeight}`};
+  ${({ lineHeight }) => lineHeight && `line-height: ${lineHeight}px`};
 
   left: ${({ left, totalWidth }) => (left ? `${(left / totalWidth) * 100}%` : 'auto')};
   right: ${({ right, totalWidth }) => (right ? `${(right / totalWidth) * 100}%` : 'auto')};
@@ -86,7 +96,7 @@ const AbsoluteDivButton = styled(BlockContainer)<{
 
   padding: 0;
   border: none;
-  ${({ boderRadius }) => boderRadius && `border-radius: ${boderRadius}px`};
+  ${({ borderRadius }) => borderRadius && `border-radius: ${borderRadius}px`};
 
   ${({ hoverColor, hoverBackgroundColor }) =>
     hoverBackgroundColor &&
