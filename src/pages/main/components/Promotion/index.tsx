@@ -1,8 +1,10 @@
 import styled from '@emotion/styled';
-import { ImageType, PromotionType } from '../../../../common/types';
+import { ButtonType, ImageType, PromotionType } from '@/common/types';
 import { ImageBlock } from './ImageBlock';
-import { usePromotionStore } from '../../../../store/usePromotionStore';
-import { useSelectedBlockIdStore } from '../../../../store/useSelectedBlockIdStore';
+import { usePromotionStore } from '@/store/usePromotionStore';
+import { useSelectedBlockIdStore } from '@/store/useSelectedBlockIdStore';
+import { ButtonBlock } from './ButtonBlock';
+import { useEffect } from 'react';
 
 export const Promotion = () => {
   const { promotion } = usePromotionStore();
@@ -15,8 +17,29 @@ export const Promotion = () => {
   return (
     <PromotionContainer onClick={onClickContainer}>
       {Object.values(promotion.blocks).map((block) => {
-        if (block.type === 'image') {
-          return <ImageBlock key={block.blockId} imageBlock={block} selected={selectedBlockId === block.blockId} />;
+        switch (block.type) {
+          case 'image':
+            return (
+              <ImageBlock
+                key={`image-${block.blockId}`}
+                imageBlock={block}
+                selected={selectedBlockId === block.blockId}
+              >
+                {block.nodes?.map((node: number) => {
+                  return (
+                    <ButtonBlock
+                      key={`button-${node}`}
+                      buttonBlock={promotion.blocks[node] as ButtonType}
+                      selected={selectedBlockId === node}
+                      totalWidth={block.width as number}
+                      totalHeight={block.height as number}
+                    />
+                  );
+                })}
+              </ImageBlock>
+            );
+          default:
+            return null;
         }
       })}
     </PromotionContainer>

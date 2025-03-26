@@ -1,11 +1,13 @@
 import { create } from 'zustand';
 import { produce } from 'immer';
-import { ContainerType, ImageType, PromotionType } from '../common/types';
+import { ButtonType, ContainerType, ImageType, PromotionType } from '@/common/types';
 
 interface PromotionStore {
   promotion: PromotionType;
   addImage: () => void;
   updateImage: (imageBlock: ImageType) => void;
+  addButton: (selectedBlockId: number) => void;
+  updateButton: (buttonBlock: ButtonType) => void;
 }
 
 export const usePromotionStore = create<PromotionStore>((set) => ({
@@ -15,7 +17,7 @@ export const usePromotionStore = create<PromotionStore>((set) => ({
       1: {
         blockId: 1,
         type: 'container',
-        children: [],
+        nodes: [],
       } as ContainerType,
     },
     events: {},
@@ -33,8 +35,9 @@ export const usePromotionStore = create<PromotionStore>((set) => ({
           url: '/images/test.png',
           width: 390,
           height: 500,
+          nodes: [],
         } as ImageType;
-        (state.promotion.blocks[1] as ContainerType).children.push(newId);
+        (state.promotion.blocks[1] as ContainerType).nodes?.push(newId);
       }),
     ),
 
@@ -42,6 +45,42 @@ export const usePromotionStore = create<PromotionStore>((set) => ({
     set(
       produce((state) => {
         state.promotion.blocks[imageBlock.blockId] = imageBlock;
+      }),
+    ),
+
+  addButton: (selectedBlockId: number) => {
+    set(
+      produce((state) => {
+        const newId = Object.keys(state.promotion.blocks).length + 1;
+        state.promotion.blocks[newId] = {
+          blockId: newId,
+          type: 'button',
+          text: 'Button',
+          width: 350,
+          height: 56,
+          left: 20,
+          bottom: 60,
+          fontSize: 17,
+          fontWeight: 600,
+          lineHeight: 140,
+          borderRadius: 8,
+          color: '#FFFFFF',
+          backgroudColor: '#00bed6',
+          disabled: false,
+          disabledBackgroundColor: '#00bed6',
+          disabledColor: '#FFFFFF',
+          hoverBackgroundColor: '#00bed6',
+          hoverColor: '#FFFFFF',
+        } as ButtonType;
+        (state.promotion.blocks[selectedBlockId] as ContainerType).nodes?.push(newId);
+      }),
+    );
+  },
+
+  updateButton: (buttonBlock: ButtonType) =>
+    set(
+      produce((state) => {
+        state.promotion.blocks[buttonBlock.blockId] = buttonBlock;
       }),
     ),
 }));
