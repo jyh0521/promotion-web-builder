@@ -1,0 +1,155 @@
+export interface PromotionType {
+  name: string;
+  blocks: Record<number, ContainerType | HeaderType | ImageType | ButtonType | ModalType | SnackbarType | CarouselType>;
+  events: Record<number, ClickEvent>;
+  conditions: Record<number, NewbieCondition>;
+  actions: Record<number, CouponDownAction>;
+}
+
+// Block
+interface Block {
+  blockId: number;
+  width?: number;
+  height?: number;
+  left?: number | string;
+  right?: number | string;
+  top?: number | string;
+  bottom?: number | string;
+}
+
+export interface ContainerType extends Block {
+  type: 'container';
+  children: number[];
+}
+
+interface HeaderType extends Block {
+  type: 'header';
+  showYn: boolean;
+  backgroundColor: string;
+  closeIconType: 'close' | 'back';
+  closeIconColor: 'black' | 'white';
+}
+
+export interface ImageType extends Block {
+  type: 'image';
+  url: string;
+}
+
+interface ButtonType extends Block {
+  type: 'button';
+  text: string;
+  fontSize: number;
+  fontWeight: number;
+  lineHeight: number;
+  boderRadius: number;
+  backgroudColor: string;
+  disabled: boolean; // default false
+  color: string;
+  hoverBackgroundColor: string;
+  hoverColor: string;
+  disabledBackgroundColor: string;
+  disabledColor: string;
+  canChangeState: boolean;
+}
+
+interface ModalType extends Block {
+  // 모달은 container와 image와 button을 조합해서 만들 수 있음
+  type: 'modal';
+}
+
+interface SnackbarType extends Block {
+  type: 'snackbar';
+  message: string;
+}
+
+interface CarouselType extends Block {
+  type: 'carousel';
+}
+
+// Event
+interface Event {
+  eventId: number;
+  blockId: number;
+  condition: number[];
+  conditionAction: {
+    true: ConditionAction;
+    false: ConditionAction;
+  };
+}
+
+interface ConditionAction {
+  firstActionId: number;
+  secondActionId: number;
+}
+
+interface ClickEvent extends Event {
+  type: 'click';
+  action: number[];
+}
+
+// Condition
+interface Condition {
+  conditionId: number;
+  child: number[];
+  eventId?: number;
+  blockId?: number;
+}
+
+interface TrueCondition extends Condition {
+  type: 'true';
+}
+
+interface NewbieCondition extends Condition {
+  type: 'newbie';
+}
+
+interface MarketingCondition extends Condition {
+  type: 'marketing';
+}
+
+// Action
+interface Action {
+  actionId: number;
+}
+
+interface CouponDownAction extends Action {
+  type: 'couponDown';
+  couponCampaignIds: number[];
+}
+
+interface MarketingAgreeAction extends Action {
+  type: 'marketingAgree';
+}
+
+interface CopyAction extends Action {
+  type: 'copy';
+}
+
+interface ShareAction extends Action {
+  type: 'share';
+}
+
+interface ExternalWebAction extends Action {
+  type: 'externalWeb';
+}
+
+interface AddCouponAction extends Action {
+  type: 'addCoupon';
+}
+
+interface ReservationAction extends Action {
+  type: 'reservation';
+}
+
+interface ModalAction extends Action {
+  type: 'modal';
+}
+
+interface SnackbarAction extends Action {
+  type: 'snackbar';
+}
+
+interface ModalSnackbarAction extends Action {
+  modalUrl: '';
+  snackbarMessage: '';
+}

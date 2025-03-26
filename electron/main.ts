@@ -1,7 +1,7 @@
-import { app, BrowserWindow, dialog, Menu } from 'electron';
-import * as path from 'path';
-import * as isDev from 'electron-is-dev';
-import * as fs from 'fs';
+import { app, BrowserWindow, dialog, Menu } from "electron";
+import * as path from "path";
+import * as isDev from "electron-is-dev";
+import * as fs from "fs";
 
 // 로깅 기능 개선
 const log = (message: string, ...args: any[]) => {
@@ -16,78 +16,82 @@ let mainWindow: BrowserWindow | null;
 function createMenu(): void {
   const template = [
     {
-      label: '파일',
-      submenu: [
-        { role: 'quit', label: '종료' }
-      ]
+      label: "파일",
+      submenu: [{ role: "quit", label: "종료" }],
     },
     {
-      label: '보기',
+      label: "보기",
       submenu: [
-        { role: 'reload', label: '새로고침' },
-        { role: 'forceReload', label: '강제 새로고침' },
-        { role: 'toggleDevTools', label: '개발자 도구' },
-        { type: 'separator' },
-        { role: 'resetZoom', label: '확대/축소 초기화' },
-        { role: 'zoomIn', label: '확대' },
-        { role: 'zoomOut', label: '축소' },
-        { type: 'separator' },
-        { role: 'togglefullscreen', label: '전체화면 전환' }
-      ]
+        { role: "reload", label: "새로고침" },
+        { role: "forceReload", label: "강제 새로고침" },
+        { role: "toggleDevTools", label: "개발자 도구" },
+        { type: "separator" },
+        { role: "resetZoom", label: "확대/축소 초기화" },
+        { role: "zoomIn", label: "확대" },
+        { role: "zoomOut", label: "축소" },
+        { type: "separator" },
+        { role: "togglefullscreen", label: "전체화면 전환" },
+      ],
     },
     {
-      label: '도움말',
+      label: "도움말",
       submenu: [
         {
-          label: '프로모션 웹 빌더 정보',
+          label: "프로모션 웹 빌더 정보",
           click: async () => {
             dialog.showMessageBox({
-              title: '프로모션 웹 빌더 정보',
-              message: '프로모션 웹 빌더',
-              detail: '버전 1.0.0\n© 2023 웹 빌더 팀'
+              title: "프로모션 웹 빌더 정보",
+              message: "프로모션 웹 빌더",
+              detail: "버전 1.0.0\n© 2023 웹 빌더 팀",
             });
-          }
-        }
-      ]
-    }
+          },
+        },
+      ],
+    },
   ];
 
   const menu = Menu.buildFromTemplate(template as any);
   Menu.setApplicationMenu(menu);
-  log('Application menu has been created and set');
+  log("Application menu has been created and set");
 }
 
 function createWindow(): void {
-  log('Creating main window...');
+  log("Creating main window...");
   // 브라우저 창을 생성합니다.
   mainWindow = new BrowserWindow({
     width: 1366,
     height: 768,
+    minWidth: 1000,
+    minHeight: 600,
+    maxWidth: 1920,
+    maxHeight: 1080,
+    resizable: true,
+    fullscreenable: true,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
-      preload: path.join(__dirname, 'preload.js')
-    }
+      preload: path.join(__dirname, "preload.js"),
+    },
   });
 
   // 메뉴바 생성 및 설정
   createMenu();
 
   // 로그 메시지 변경
-  log('Window created in windowed mode with menu bar');
+  log("Window created in windowed mode with menu bar");
 
   // 개발 환경과 프로덕션 환경에서의 경로 설정
   let indexPath: string;
-  
+
   // 이 앱이 패키지로 실행된건지 개발 모드로 실행된건지 더 정확히 확인
   const isPackaged = app.isPackaged;
   const runningInDev = isDev && !isPackaged;
 
   if (runningInDev) {
     // 개발 모드에서는 React 개발 서버 URL을 사용
-    indexPath = 'http://localhost:5000';
-    log('Running in development mode, using URL:', indexPath);
-    
+    indexPath = "http://localhost:5001";
+    log("Running in development mode, using URL:", indexPath);
+
     // React 서버 연결 테스트 (실패 시 오류 메시지 표시)
     try {
       // 10초 내에 연결 시도 (최대 5번)
@@ -95,57 +99,61 @@ function createWindow(): void {
       const maxAttempts = 5;
       const checkServer = () => {
         attempts++;
-        log(`Attempting to connect to React server (${attempts}/${maxAttempts})...`);
-        
+        log(
+          `Attempting to connect to React server (${attempts}/${maxAttempts})...`
+        );
+
         if (mainWindow) {
-          mainWindow.loadURL(indexPath)
+          mainWindow
+            .loadURL(indexPath)
             .then(() => {
-              log('Successfully connected to React development server');
-              
+              log("Successfully connected to React development server");
+
               // 개발자 도구를 엽니다
               // mainWindow?.webContents.openDevTools();
             })
-            .catch(err => {
+            .catch((err) => {
               log(`Failed to connect on attempt ${attempts}:`, err);
-              
+
               if (attempts < maxAttempts) {
                 // 2초 후 다시 시도
                 setTimeout(checkServer, 2000);
               } else {
-                log('Maximum connection attempts reached');
-                showErrorDialog('React 서버 연결 실패', 
-                  '개발 서버에 연결할 수 없습니다. React 서버가 실행 중인지 확인하세요.\n\n' +
-                  '아래 명령어로 React 서버를 먼저 실행해보세요:\n' +
-                  'yarn start:react'
+                log("Maximum connection attempts reached");
+                showErrorDialog(
+                  "React 서버 연결 실패",
+                  "개발 서버에 연결할 수 없습니다. React 서버가 실행 중인지 확인하세요.\n\n" +
+                    "아래 명령어로 React 서버를 먼저 실행해보세요:\n" +
+                    "yarn start:react"
                 );
               }
             });
         }
       };
-      
+
       checkServer();
     } catch (err) {
-      log('Error trying to connect to development server:', err);
+      log("Error trying to connect to development server:", err);
     }
   } else {
     // 빌드된 애플리케이션에서 사용할 경로 계산
-    log('Running in production mode, locating index.html...');
-    
+    log("Running in production mode, locating index.html...");
+
     // 가능한 모든 경로를 시도해봅니다
     const possiblePaths = [
-      path.join(__dirname, '../build/index.html'),
-      path.resolve(__dirname, '../build/index.html'),
-      path.join(__dirname, '../../build/index.html'),
-      path.join(app.getAppPath(), 'build/index.html'),
-      path.join(process.resourcesPath, 'app/build/index.html'),
-      path.join(process.resourcesPath, 'build/index.html'),
-      path.join(__dirname, '../../../build/index.html'),
+      path.join(__dirname, "../build/index.html"),
+      path.resolve(__dirname, "../build/index.html"),
+      path.join(__dirname, "../../build/index.html"),
+      path.join(app.getAppPath(), "build/index.html"),
+      path.join(process.resourcesPath, "app/build/index.html"),
+      path.join(process.resourcesPath, "build/index.html"),
+      path.join(__dirname, "../../../build/index.html"),
     ];
-    
-    log('Checking possible index.html paths:');
-    
+
+    log("Checking possible index.html paths:");
+
     // 존재하는 첫 번째 파일 경로 찾기
-    let foundPath = '';
+    let foundPath = "";
     for (const p of possiblePaths) {
       const exists = fs.existsSync(p);
       log(`- Path: ${p}, Exists: ${exists}`);
@@ -154,35 +162,37 @@ function createWindow(): void {
         break;
       }
     }
-    
+
     if (foundPath) {
       indexPath = `file://${foundPath}`;
-      log('Using path for index.html:', foundPath);
-      
+      log("Using path for index.html:", foundPath);
+
       // 파일 로드 시도
       if (mainWindow) {
-        mainWindow.loadURL(indexPath).catch(err => {
-          log('Failed to load production URL:', err);
-          showErrorDialog('빌드 파일 로드 오류', 
-            '빌드된 파일을 로드하는 중 오류가 발생했습니다.\n\n' +
-            `오류 메시지: ${err.message}\n` +
-            `시도한 경로: ${indexPath}`
+        mainWindow.loadURL(indexPath).catch((err) => {
+          log("Failed to load production URL:", err);
+          showErrorDialog(
+            "빌드 파일 로드 오류",
+            "빌드된 파일을 로드하는 중 오류가 발생했습니다.\n\n" +
+              `오류 메시지: ${err.message}\n` +
+              `시도한 경로: ${indexPath}`
           );
         });
       }
     } else {
-      log('No valid index.html path found!');
-      showErrorDialog('빌드 파일 찾기 실패', 
-        '애플리케이션의 빌드 파일을 찾을 수 없습니다.\n\n' +
-        '애플리케이션이 제대로 빌드되었는지 확인하세요.'
+      log("No valid index.html path found!");
+      showErrorDialog(
+        "빌드 파일 찾기 실패",
+        "애플리케이션의 빌드 파일을 찾을 수 없습니다.\n\n" +
+          "애플리케이션이 제대로 빌드되었는지 확인하세요."
       );
     }
   }
 
   // 창이 닫힐 때 발생하는 이벤트입니다.
   if (mainWindow) {
-    mainWindow.on('closed', () => {
-      log('Main window closed');
+    mainWindow.on("closed", () => {
+      log("Main window closed");
       mainWindow = null;
     });
   }
@@ -191,16 +201,16 @@ function createWindow(): void {
 // 오류 대화 상자 표시 함수
 function showErrorDialog(title: string, message: string) {
   log(`Error dialog: ${title} - ${message}`);
-  
+
   // 메인 윈도우가 없으면 새로 생성해 오류 표시
   if (!mainWindow || mainWindow.isDestroyed()) {
     mainWindow = new BrowserWindow({
       width: 500,
       height: 400,
-      webPreferences: { nodeIntegration: true }
+      webPreferences: { nodeIntegration: true },
     });
   }
-  
+
   // HTML 오류 페이지 표시
   mainWindow.loadURL(`data:text/html,
     <html>
@@ -214,11 +224,11 @@ function showErrorDialog(title: string, message: string) {
       </head>
       <body>
         <h1>${title}</h1>
-        <p>${message.replace(/\n/g, '<br>')}</p>
+        <p>${message.replace(/\n/g, "<br>")}</p>
       </body>
     </html>
   `);
-  
+
   // 에러 대화상자 표시
   dialog.showErrorBox(title, message);
 }
@@ -226,37 +236,40 @@ function showErrorDialog(title: string, message: string) {
 // 이 메소드는 Electron이 초기화를 마치고
 // 브라우저 창을 생성할 준비가 되었을 때 호출됩니다.
 // 일부 API는 이 이벤트가 발생한 이후에만 사용할 수 있습니다.
-app.whenReady().then(() => {
-  log('App is ready, creating window...');
-  createWindow();
+app
+  .whenReady()
+  .then(() => {
+    log("App is ready, creating window...");
+    createWindow();
 
-  app.on('activate', () => {
-    // macOS에서는 독(Dock) 아이콘 클릭 시 창이 없으면 다시 생성합니다.
-    if (BrowserWindow.getAllWindows().length === 0) {
-      log('App activated, creating new window...');
-      createWindow();
-    }
+    app.on("activate", () => {
+      // macOS에서는 독(Dock) 아이콘 클릭 시 창이 없으면 다시 생성합니다.
+      if (BrowserWindow.getAllWindows().length === 0) {
+        log("App activated, creating new window...");
+        createWindow();
+      }
+    });
+  })
+  .catch((err) => {
+    log("Failed to initialize app:", err);
   });
-}).catch(err => {
-  log('Failed to initialize app:', err);
-});
 
 // 모든 창이 닫히면 앱을 종료합니다. (macOS 제외)
-app.on('window-all-closed', () => {
-  log('All windows closed');
-  if (process.platform !== 'darwin') {
-    log('Quitting app...');
+app.on("window-all-closed", () => {
+  log("All windows closed");
+  if (process.platform !== "darwin") {
+    log("Quitting app...");
     app.quit();
   }
 });
 
 // 앱이 종료되기 전
-app.on('before-quit', () => {
-  log('App is about to quit');
-  
+app.on("before-quit", () => {
+  log("App is about to quit");
+
   // 모든 창과 자원을 명시적으로 해제
   if (mainWindow) {
-    log('Closing mainWindow explicitly');
+    log("Closing mainWindow explicitly");
     try {
       mainWindow.removeAllListeners();
       mainWindow.webContents.removeAllListeners();
@@ -264,17 +277,17 @@ app.on('before-quit', () => {
         mainWindow.close();
       }
     } catch (err) {
-      log('Error while closing mainWindow:', err);
+      log("Error while closing mainWindow:", err);
     }
   }
 });
 
 // 앱이 종료될 때
-app.on('will-quit', () => {
-  log('App will quit');
+app.on("will-quit", () => {
+  log("App will quit");
 });
 
 // 앱이 종료된 후
-app.on('quit', () => {
-  log('App has quit');
-}); 
+app.on("quit", () => {
+  log("App has quit");
+});
