@@ -25,6 +25,7 @@
   },
   "author": "",
   "dependencies": {
+    "@ant-design/icons": "^6.0.0",
     "@emotion/react": "11.11.0",
     "@emotion/styled": "11.11.0",
     "@testing-library/jest-dom": "^5.16.5",
