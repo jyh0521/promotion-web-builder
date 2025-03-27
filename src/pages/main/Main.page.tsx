@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { LeftSidebar } from './components/LeftSidebar';
-import { OptionSidebar } from './components/OptionSidebar';
+import { RightSidebar } from './components/RightSidebar';
 import { Promotion } from './components/Promotion';
 import { Toolbar } from './components/Toolbar';
 
@@ -10,7 +10,7 @@ const MainPage = () => {
       <LeftSidebar />
       <Promotion />
       <Toolbar />
-      <OptionSidebar />
+      <RightSidebar />
     </MainContainer>
   );
 };

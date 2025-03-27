@@ -4,14 +4,14 @@ import { useSelectedBlockIdStore } from '@/store/useSelectedBlockIdStore';
 import { usePromotionStore } from '@/store/usePromotionStore';
 import { ButtonOptions } from './ButtonOptios';
 
-export const OptionSidebar = () => {
+export const RightSidebar = () => {
   const { promotion } = usePromotionStore();
   const { selectedBlockId } = useSelectedBlockIdStore();
 
-  if (!selectedBlockId) return <OptionSidebarContainer />;
+  if (!selectedBlockId) return <RightSidebarContainer />;
 
   return (
-    <OptionSidebarContainer>
+    <RightSidebarContainer>
       {(() => {
         switch (promotion.blocks[selectedBlockId].type) {
           case 'image':
@@ -22,12 +22,12 @@ export const OptionSidebar = () => {
             return null;
         }
       })()}
-    </OptionSidebarContainer>
+    </RightSidebarContainer>
   );
 };
 
-const OptionSidebarContainer = styled.div`
-  width: 30%;
+const RightSidebarContainer = styled.div`
+  width: 500px;
   height: 100%;
   background-color: #ffffff;
 
