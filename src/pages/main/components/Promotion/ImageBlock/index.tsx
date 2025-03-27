@@ -1,7 +1,9 @@
 import styled from '@emotion/styled';
 import { ImageType } from '@common/types';
 import { useSelectedBlockIdStore } from '@store/useSelectedBlockIdStore';
+import { useHoveredBlockIdStore } from '@store/useHoveredBlockIdStore';
 import { BlockContainer } from '@/components/BlockContainer';
+
 type ImageBlockProps = {
   imageBlock: ImageType;
   selected: boolean;
@@ -10,6 +12,7 @@ type ImageBlockProps = {
 
 export const ImageBlock = ({ imageBlock, selected, children }: ImageBlockProps) => {
   const { setSelectedBlockId } = useSelectedBlockIdStore();
+  const { hoveredBlockId } = useHoveredBlockIdStore();
 
   const onClickImage = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
@@ -17,7 +20,12 @@ export const ImageBlock = ({ imageBlock, selected, children }: ImageBlockProps) 
   };
 
   return (
-    <ImageContainer {...imageBlock} selected={selected} onClick={onClickImage}>
+    <ImageContainer
+      {...imageBlock}
+      selected={selected}
+      hovered={hoveredBlockId === imageBlock.blockId}
+      onClick={onClickImage}
+    >
       <img src={imageBlock.url} alt={`block-${imageBlock.blockId}`} />
       {children}
     </ImageContainer>
