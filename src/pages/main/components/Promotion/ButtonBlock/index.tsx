@@ -1,5 +1,6 @@
 import { ButtonType } from '@/common/types';
 import { useSelectedBlockIdStore } from '@/store/useSelectedBlockIdStore';
+import { useHoveredBlockIdStore } from '@/store/useHoveredBlockIdStore';
 import { BlockContainer } from '@/components/BlockContainer';
 import styled from '@emotion/styled';
 
@@ -12,6 +13,7 @@ type ButtonBlockProps = {
 
 export const ButtonBlock = ({ buttonBlock, selected, totalWidth, totalHeight }: ButtonBlockProps) => {
   const { setSelectedBlockId } = useSelectedBlockIdStore();
+  const { hoveredBlockId } = useHoveredBlockIdStore();
 
   const onClickButton = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
@@ -40,6 +42,7 @@ export const ButtonBlock = ({ buttonBlock, selected, totalWidth, totalHeight }: 
       disabledBackgroundColor={buttonBlock.disabledBackgroundColor}
       disabledColor={buttonBlock.disabledColor}
       onClick={onClickButton}
+      hovered={hoveredBlockId === buttonBlock.blockId}
     >
       {buttonBlock.text}
     </AbsoluteDivButton>

@@ -1,19 +1,20 @@
 import { usePromotionStore } from '@/store/usePromotionStore';
+import { useSelectedBlockIdStore } from '@/store/useSelectedBlockIdStore';
+import { useHoveredBlockIdStore } from '@/store/useHoveredBlockIdStore';
 import styled from '@emotion/styled';
 import { useEffect, useState } from 'react';
 
-const Block = () => {};
-
-type ShowBlock = {
-  blockId: number;
-  type: string;
-  isShow: boolean;
-};
-
 export const BlockList = () => {
+  const { selectedBlockId, setSelectedBlockId } = useSelectedBlockIdStore();
+  const { hoveredBlockId, setHoveredBlockId } = useHoveredBlockIdStore();
+
   const { promotion } = usePromotionStore();
   const [renderedBlocks, setRenderedBlocks] = useState<Set<number>>(new Set());
   const [blockElements, setBlockElements] = useState<React.ReactNode[]>([]);
+
+  const onClickBlock = (blockId: number) => {
+    setSelectedBlockId(blockId);
+  };
 
   useEffect(() => {
     const newRenderedBlocks = new Set<number>();
@@ -26,11 +27,17 @@ export const BlockList = () => {
 
       return (
         <BlockItem key={blockId} depth={depth} isLastChild={isLastChild}>
-          {block.type}
+          <BlockChildren
+            type={block.type}
+            onClick={() => onClickBlock(blockId)}
+            selected={block.type !== 'container' && selectedBlockId === blockId}
+            onMouseEnter={() => setHoveredBlockId(blockId)}
+            onMouseLeave={() => setHoveredBlockId(null)}
+          >
+            {block.type}
+          </BlockChildren>
           {block.nodes && (
-            <BlockChildren>
-              {block.nodes.map((nodeId, index, array) => renderBlock(nodeId, depth + 1, index === array.length - 1))}
-            </BlockChildren>
+            <>{block.nodes.map((nodeId, index, array) => renderBlock(nodeId, depth + 1, index === array.length - 1))}</>
           )}
         </BlockItem>
       );
@@ -43,7 +50,7 @@ export const BlockList = () => {
     const elements = rootBlocks.map((block, index, array) => renderBlock(block.blockId, 0, index === array.length - 1));
     setBlockElements(elements);
     setRenderedBlocks(newRenderedBlocks);
-  }, [promotion.blocks]);
+  }, [promotion.blocks, selectedBlockId, hoveredBlockId]);
 
   return <BlockListContainer>{blockElements}</BlockListContainer>;
 };
@@ -62,4 +69,26 @@ const BlockItem = styled.div<{ depth: number; isLastChild: boolean }>`
   `}
 `;
 
-const BlockChildren = styled.div``;
+const BlockChildren = styled.div<{ type: string; selected: boolean }>`
+  ${({ type }) =>
+    type === 'container' &&
+    `
+    pointer-events: none;
+  `}
+
+  cursor: pointer;
+
+  &:hover {
+    ${({ type }) =>
+      type !== 'container' &&
+      `
+      background-color: #f0f0f0;
+  `}
+  }
+
+  ${({ selected }) =>
+    selected &&
+    `
+    outline: 1px solid #8d44f2;
+  `}
+`;
