@@ -51,9 +51,9 @@ export interface ButtonType extends Block {
   canChangeState: boolean;
 }
 
-interface ModalType extends Block {
-  // 모달은 container와 image와 button을 조합해서 만들 수 있음
+export interface ModalType extends Block {
   type: 'modal';
+  nodes: number[];
 }
 
 interface SnackbarType extends Block {

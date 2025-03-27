@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { produce } from 'immer';
-import { ButtonType, ContainerType, ImageType, PromotionType } from '@/common/types';
+import { ButtonType, ContainerType, ImageType, ModalType, PromotionType } from '@/common/types';
 
 interface PromotionStore {
   promotion: PromotionType;
@@ -8,6 +8,7 @@ interface PromotionStore {
   updateImage: (imageBlock: ImageType) => void;
   addButton: (selectedBlockId: number) => void;
   updateButton: (buttonBlock: ButtonType) => void;
+  addModal: (selectedBlockId: number) => void;
 }
 
 export const usePromotionStore = create<PromotionStore>((set) => ({
@@ -83,4 +84,45 @@ export const usePromotionStore = create<PromotionStore>((set) => ({
         state.promotion.blocks[buttonBlock.blockId] = buttonBlock;
       }),
     ),
+
+  addModal: (selectedBlockId: number) => {
+    set(
+      produce((state) => {
+        const newId = Object.keys(state.promotion.blocks).length + 1;
+
+        state.promotion.blocks[newId] = {
+          blockId: newId,
+          type: 'modal',
+          nodes: [newId + 1],
+        } as ModalType;
+
+        state.promotion.blocks[newId + 1] = {
+          blockId: newId + 1,
+          type: 'image',
+          url: '/images/test.png',
+          width: 390,
+          height: 500,
+          nodes: [newId + 2, newId + 3],
+        } as ImageType;
+
+        state.promotion.blocks[newId + 2] = {
+          blockId: newId + 2,
+          type: 'button',
+          text: 'ModalButton',
+          width: 308,
+          height: 50,
+        } as ButtonType;
+
+        state.promotion.blocks[newId + 3] = {
+          blockId: newId + 3,
+          type: 'button',
+          text: 'ModalButton',
+          width: 308,
+          height: 50,
+        } as ButtonType;
+
+        (state.promotion.blocks[selectedBlockId] as ContainerType).nodes = [newId];
+      }),
+    );
+  },
 }));
