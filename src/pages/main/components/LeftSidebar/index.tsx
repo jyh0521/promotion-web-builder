@@ -1,10 +1,12 @@
 import styled from '@emotion/styled';
-import { Button, Input } from 'antd';
+import { Input } from 'antd';
+import { BlockList } from './BlockList';
 
 export const LeftSidebar = () => {
   return (
     <LeftSidebarContainer>
       <Input placeholder={'프로모션 이름'} />
+      <BlockList />
     </LeftSidebarContainer>
   );
 };
@@ -15,4 +17,6 @@ const LeftSidebarContainer = styled.div`
   background-color: #ffffff;
 
   padding: 24px;
+
+  overflow-y: auto;
 `;
