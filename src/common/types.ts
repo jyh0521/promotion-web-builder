@@ -16,6 +16,7 @@ interface Block {
   top?: number | string;
   bottom?: number | string;
   nodes?: number[];
+  events?: number[];
 }
 
 export interface ContainerType extends Block {
@@ -42,18 +43,39 @@ export interface ButtonType extends Block {
   lineHeight: number;
   borderRadius: number;
   backgroudColor: string;
-  disabled: boolean; // default false
+  disabled: boolean;
   color: string;
   hoverBackgroundColor: string;
   hoverColor: string;
   disabledBackgroundColor: string;
   disabledColor: string;
-  canChangeState: boolean;
 }
 
 export interface ModalType extends Block {
   type: 'modal';
-  nodes: number[];
+  image: ModalImageType;
+  buttons: ModalButtonType[];
+}
+
+interface ModalImageType {
+  url: string;
+  width: number;
+  height: number;
+}
+
+interface ModalButtonType {
+  text: string;
+  fontSize: number;
+  fontWeight: number;
+  lineHeight: number;
+  borderRadius: number;
+  backgroudColor: string;
+  disabled: boolean;
+  color: string;
+  hoverBackgroundColor: string;
+  hoverColor: string;
+  disabledBackgroundColor: string;
+  disabledColor: string;
 }
 
 interface SnackbarType extends Block {
