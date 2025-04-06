@@ -2,7 +2,7 @@ import { ButtonType } from '@/common/types';
 import { usePromotionStore } from '@/store/usePromotionStore';
 import { useSelectedBlockIdStore } from '@/store/useSelectedBlockIdStore';
 import styled from '@emotion/styled';
-import { Descriptions, Input, InputNumber } from 'antd';
+import { Descriptions, Input, InputNumber, Select } from 'antd';
 
 export const ButtonOptions = () => {
   const { promotion, updateButton } = usePromotionStore();
@@ -195,6 +195,45 @@ export const ButtonOptions = () => {
               });
             }}
           />
+        </Descriptions.Item>
+      </Descriptions>
+      <Descriptions title="이벤트" bordered style={{ textAlign: 'left' }} column={1}>
+        <Descriptions.Item label="종류">
+          <Select defaultValue="click" disabled>
+            <Select.Option value="click">클릭</Select.Option>
+          </Select>
+        </Descriptions.Item>
+        <Descriptions.Item label="조건">
+          <Select defaultValue="none">
+            <Select.Option value="none">없음</Select.Option>
+            <Select.Option value="newbie">뉴비</Select.Option>
+          </Select>
+        </Descriptions.Item>
+        <Descriptions.Item label="true 액션">
+          <Select defaultValue="none">
+            <Select.Option value="none">없음</Select.Option>
+            <Select.Option value="couponDownload">쿠폰 다운</Select.Option>
+            <Select.Option value="alert">얼럿</Select.Option>
+          </Select>
+        </Descriptions.Item>
+        <Descriptions.Item label="true 액션 결과">
+          <Select defaultValue="none">
+            <Select.Option value="none">없음</Select.Option>
+            <Select.Option value="modal">모달</Select.Option>
+          </Select>
+        </Descriptions.Item>
+        <Descriptions.Item label="false 액션">
+          <Select defaultValue="none">
+            <Select.Option value="none">없음</Select.Option>
+            <Select.Option value="couponDownload">쿠폰 다운</Select.Option>
+            <Select.Option value="alert">얼럿</Select.Option>
+          </Select>
+        </Descriptions.Item>
+        <Descriptions.Item label="false 액션 결과">
+          <Select defaultValue="none">
+            <Select.Option value="none">없음</Select.Option>
+            <Select.Option value="modal">모달</Select.Option>
+          </Select>
         </Descriptions.Item>
       </Descriptions>
     </ButtonOptionsContainer>

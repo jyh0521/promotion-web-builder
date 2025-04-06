@@ -27,7 +27,7 @@ export const RightSidebar = () => {
 };
 
 const RightSidebarContainer = styled.div`
-  width: 500px;
+  width: 600px;
   height: 100%;
   background-color: #ffffff;
 

@@ -5,7 +5,7 @@ import { useSelectedBlockIdStore } from '@/store/useSelectedBlockIdStore';
 import { useEffect, useState } from 'react';
 
 export const Toolbar = () => {
-  const { promotion, addImage, addButton, addModal } = usePromotionStore();
+  const { promotion, addImage, addButton } = usePromotionStore();
   const { selectedBlockId } = useSelectedBlockIdStore();
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [isNotificationDisabled, setIsNotificationDisabled] = useState(true);
@@ -31,9 +31,9 @@ export const Toolbar = () => {
       <ToolbarButton disabled={isButtonDisabled} onClick={() => addButton(selectedBlockId as number)}>
         <PlusSquareOutlined style={{ fontSize: 24 }} />
       </ToolbarButton>
-      <ToolbarButton disabled={isNotificationDisabled} onClick={() => addModal(selectedBlockId as number)}>
+      {/* <ToolbarButton disabled={isNotificationDisabled} onClick={() => addModal(selectedBlockId as number)}>
         <NotificationOutlined style={{ fontSize: 24 }} />
-      </ToolbarButton>
+      </ToolbarButton> */}
     </ToolbarContainer>
   );
 };

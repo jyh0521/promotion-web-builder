@@ -103,7 +103,7 @@ interface ConditionAction {
   secondActionId: number;
 }
 
-interface ClickEvent extends Event {
+export interface ClickEvent extends Event {
   type: 'click';
   action: number[];
 }
