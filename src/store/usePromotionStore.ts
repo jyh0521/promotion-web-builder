@@ -1,6 +1,16 @@
 import { create } from 'zustand';
 import { produce } from 'immer';
-import { ButtonType, ClickEvent, ContainerType, ImageType, ModalType, PromotionType } from '@/common/types';
+import {
+  ButtonType,
+  ClickEvent,
+  ConditionAction,
+  ContainerType,
+  Event,
+  ImageType,
+  ModalType,
+  PromotionType,
+  TrueCondition,
+} from '@/common/types';
 
 interface PromotionStore {
   promotion: PromotionType;
@@ -9,6 +19,9 @@ interface PromotionStore {
   addButton: (selectedBlockId: number) => void;
   updateButton: (buttonBlock: ButtonType) => void;
   // addModal: (selectedBlockId: number) => void;
+  addClickEvent: (state: PromotionStore, blockId: number) => number;
+  addTrueConditionToEvent: (eventId: number, blockId: number, state: any) => void;
+  getEventsByBlockId: (selectedBlockId: number) => PromotionType['events'];
 }
 
 export const usePromotionStore = create<PromotionStore>((set) => ({
@@ -21,9 +34,9 @@ export const usePromotionStore = create<PromotionStore>((set) => ({
         nodes: [],
       } as ContainerType,
     },
-    events: {},
-    conditions: {},
-    actions: {},
+    events: [],
+    conditions: [],
+    actions: [],
   },
 
   addImage: () =>
@@ -48,6 +61,38 @@ export const usePromotionStore = create<PromotionStore>((set) => ({
         state.promotion.blocks[imageBlock.blockId] = imageBlock;
       }),
     ),
+
+  // 이벤트 추가 함수 분리
+  addClickEvent: (state: PromotionStore, blockId: number) => {
+    const eventId = Object.keys(state.promotion.events).length + 1;
+    state.promotion.events[eventId] = {
+      eventId,
+      blockId,
+      type: 'click',
+      condition: [],
+      // conditionAction: {
+      //   true: {} as ConditionAction,
+      //   false: {} as ConditionAction,
+      // },
+      action: [],
+    };
+
+    (state.promotion.blocks[blockId] as ContainerType).events?.push(eventId);
+
+    return eventId;
+  },
+
+  addTrueConditionToEvent: (eventId: number, blockId: number, state: PromotionStore) => {
+    const conditionId = Object.keys(state.promotion.conditions).length + 1;
+    state.promotion.conditions[conditionId] = {
+      conditionId,
+      type: 'true',
+      child: [],
+      eventId,
+      blockId,
+    } as TrueCondition;
+    state.promotion.events[eventId].condition.push(conditionId);
+  },
 
   addButton: (selectedBlockId: number) => {
     set(
@@ -75,22 +120,10 @@ export const usePromotionStore = create<PromotionStore>((set) => ({
         } as ButtonType;
         (state.promotion.blocks[selectedBlockId] as ContainerType).nodes?.push(blockId);
 
-        // 일단 버튼 추가할 때, 클릭 이벤트 자동으로 달리게 해둠
-        const eventId = Object.keys(state.promotion.events).length + 1;
-
-        state.promotion.events[eventId] = {
-          eventId,
-          blockId,
-          type: 'click',
-          condition: [],
-          conditionAction: {
-            true: {},
-            false: {},
-          },
-          action: [],
-        };
-
-        (state.promotion.blocks[blockId] as ContainerType).events?.push(eventId);
+        // 분리된 함수 사용
+        const eventId = usePromotionStore.getState().addClickEvent(state, blockId);
+        // true 컨디션 자동 추가
+        usePromotionStore.getState().addTrueConditionToEvent(eventId, blockId, state);
       }),
     );
   },
@@ -101,6 +134,14 @@ export const usePromotionStore = create<PromotionStore>((set) => ({
         state.promotion.blocks[buttonBlock.blockId] = buttonBlock;
       }),
     ),
+
+  // insertTrueCondition: (eventId: number, conditionId: number) => {
+  //   set(
+  //     produce((state) => {
+  //       state.promotion.events[eventId].condition.push(conditionId);
+  //     }),
+  //   );
+  // },
 
   // addModal: (selectedBlockId: number) => {
   //   set(
@@ -142,4 +183,28 @@ export const usePromotionStore = create<PromotionStore>((set) => ({
   //     }),
   //   );
   // },
+  addModal: (selectedBlockId: number) => {
+    set(
+      produce((state) => {
+        const newId = Object.keys(state.promotion.blocks).length + 1;
+        state.promotion.blocks[newId] = {
+          blockId: newId,
+          type: 'modal',
+          image: {
+            blockId: newId + 1,
+            type: 'image',
+            url: '/images/test.png',
+            width: 390,
+            height: 500,
+          },
+          buttons: [],
+        } as ModalType;
+        (state.promotion.blocks[selectedBlockId] as ContainerType).nodes = [newId];
+      }),
+    );
+  },
+
+  getEventsByBlockId: (selectedBlockId: number): PromotionType['events'] => {
+    return usePromotionStore.getState().promotion.events;
+  },
 }));

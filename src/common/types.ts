@@ -2,7 +2,7 @@ export interface PromotionType {
   name: string;
   blocks: Record<number, ContainerType | HeaderType | ImageType | ButtonType | ModalType | SnackbarType | CarouselType>;
   events: Record<number, ClickEvent>;
-  conditions: Record<number, NewbieCondition>;
+  conditions: Record<number, TrueCondition | NewbieCondition | MarketingCondition>;
   actions: Record<number, CouponDownAction>;
 }
 
@@ -88,19 +88,19 @@ interface CarouselType extends Block {
 }
 
 // Event
-interface Event {
+export interface Event {
   eventId: number;
   blockId: number;
   condition: number[];
-  conditionAction: {
+  conditionAction?: {
     true: ConditionAction;
     false: ConditionAction;
   };
 }
 
-interface ConditionAction {
-  firstActionId: number;
-  secondActionId: number;
+export interface ConditionAction {
+  actionId: number;
+  afterActionId: number;
 }
 
 export interface ClickEvent extends Event {
@@ -116,7 +116,7 @@ interface Condition {
   blockId?: number;
 }
 
-interface TrueCondition extends Condition {
+export interface TrueCondition extends Condition {
   type: 'true';
 }
 
@@ -173,4 +173,9 @@ interface SnackbarAction extends Action {
 interface ModalSnackbarAction extends Action {
   modalUrl: '';
   snackbarMessage: '';
+}
+
+interface OpenURLAction extends Action {
+  type: 'openUrl';
+  url: string;
 }
