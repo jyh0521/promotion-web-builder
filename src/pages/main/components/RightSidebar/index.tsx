@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { ImageOptions } from './ImageOptions';
 import { useSelectedBlockIdStore } from '@/store/useSelectedBlockIdStore';
 import { usePromotionStore } from '@/store/usePromotionStore';
-import { ButtonOptions } from './ButtonOptios';
+import { ButtonOptions } from './ButtonOptions';
 
 export const RightSidebar = () => {
   const { promotion } = usePromotionStore();
