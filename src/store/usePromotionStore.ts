@@ -14,6 +14,7 @@ import {
 
 interface PromotionStore {
   promotion: PromotionType;
+  updatePromotionName: (name: string) => void;
   addImage: () => void;
   updateImage: (imageBlock: ImageType) => void;
   addButton: (selectedBlockId: number) => void;
@@ -39,6 +40,13 @@ export const usePromotionStore = create<PromotionStore>((set) => ({
     conditions: {},
     actions: {},
   },
+
+  updatePromotionName: (name: string) =>
+    set(
+      produce((state) => {
+        state.promotion.name = name;
+      }),
+    ),
 
   addImage: () =>
     set(

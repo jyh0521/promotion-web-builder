@@ -4,12 +4,16 @@ import { BlockList } from './BlockList';
 import { usePromotionStore } from '@/store/usePromotionStore';
 
 export const LeftSidebar = () => {
-  const { promotion } = usePromotionStore();
+  const { promotion, updatePromotionName } = usePromotionStore();
 
   return (
     <LeftSidebarContainer>
       <Container>
-        <Input placeholder={'프로모션 이름'} />
+        <Input
+          placeholder={'프로모션 이름'}
+          value={promotion.name}
+          onChange={(e) => updatePromotionName(e.target.value)}
+        />
         <Button type={'primary'} onClick={() => console.log(promotion)}>
           저장
         </Button>
