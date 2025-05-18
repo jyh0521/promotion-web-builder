@@ -3,7 +3,20 @@ export interface PromotionType {
   blocks: Record<number, ContainerType | HeaderType | ImageType | ButtonType | ModalType | SnackbarType | CarouselType>;
   events: Record<number, ClickEvent>;
   conditions: Record<number, TrueCondition | NewbieCondition | MarketingCondition>;
-  actions: Record<number, CouponDownAction>;
+  actions: Record<
+    number,
+    | CouponDownAction
+    | MarketingAgreeAction
+    | CopyAction
+    | ShareAction
+    | ExternalWebAction
+    | AddCouponAction
+    | ReservationAction
+    | ModalAction
+    | SnackbarAction
+    | ModalSnackbarAction
+    | OpenURLAction
+  >;
 }
 
 // Block
@@ -93,14 +106,14 @@ export interface Event {
   blockId: number;
   condition: number[];
   conditionAction?: {
-    true: ConditionAction;
-    false: ConditionAction;
+    true?: ConditionAction;
+    false?: ConditionAction;
   };
 }
 
 export interface ConditionAction {
   actionId: number;
-  afterActionId: number;
+  afterActionId?: number;
 }
 
 export interface ClickEvent extends Event {
