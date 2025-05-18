@@ -22,6 +22,7 @@ interface PromotionStore {
   addClickEvent: (state: PromotionStore, blockId: number) => number;
   addTrueConditionToEvent: (eventId: number, blockId: number, state: any) => void;
   getEventsByBlockId: (selectedBlockId: number) => PromotionType['events'];
+  addOpenUrlAction: ({ eventId, url, trueAction }: { eventId: number; url: string; trueAction: boolean }) => void;
 }
 
 export const usePromotionStore = create<PromotionStore>((set) => ({
@@ -34,9 +35,9 @@ export const usePromotionStore = create<PromotionStore>((set) => ({
         nodes: [],
       } as ContainerType,
     },
-    events: [],
-    conditions: [],
-    actions: [],
+    events: {},
+    conditions: {},
+    actions: {},
   },
 
   addImage: () =>
@@ -93,6 +94,44 @@ export const usePromotionStore = create<PromotionStore>((set) => ({
     } as TrueCondition;
     state.promotion.events[eventId].condition.push(conditionId);
   },
+
+  addOpenUrlAction: ({ eventId, url, trueAction = true }: { eventId: number; url: string; trueAction: boolean }) =>
+    set(
+      produce((state) => {
+        const event = state.promotion.events[eventId];
+        let actionId = 0;
+
+        if (!event) {
+          actionId = Object.keys(state.promotion.actions).length + 1;
+        } else {
+          if (trueAction) {
+            actionId = event.conditionAction?.true?.actionId ?? 0;
+          } else {
+            actionId = event.conditionAction?.false?.actionId ?? 0;
+          }
+        }
+
+        state.promotion.actions[actionId] = {
+          actionId,
+          type: 'openUrl',
+          url,
+        };
+
+        if (trueAction) {
+          state.promotion.events[eventId].conditionAction = {
+            true: {
+              actionId,
+            },
+          };
+        } else {
+          state.promotion.events[eventId].conditionAction = {
+            false: {
+              actionId,
+            },
+          };
+        }
+      }),
+    ),
 
   addButton: (selectedBlockId: number) => {
     set(
