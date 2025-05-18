@@ -2,8 +2,21 @@ export interface PromotionType {
   name: string;
   blocks: Record<number, ContainerType | HeaderType | ImageType | ButtonType | ModalType | SnackbarType | CarouselType>;
   events: Record<number, ClickEvent>;
-  conditions: Record<number, NewbieCondition>;
-  actions: Record<number, CouponDownAction>;
+  conditions: Record<number, TrueCondition | NewbieCondition | MarketingCondition>;
+  actions: Record<
+    number,
+    | CouponDownAction
+    | MarketingAgreeAction
+    | CopyAction
+    | ShareAction
+    | ExternalWebAction
+    | AddCouponAction
+    | ReservationAction
+    | ModalAction
+    | SnackbarAction
+    | ModalSnackbarAction
+    | OpenURLAction
+  >;
 }
 
 // Block
@@ -16,6 +29,7 @@ interface Block {
   top?: number | string;
   bottom?: number | string;
   nodes?: number[];
+  events?: number[];
 }
 
 export interface ContainerType extends Block {
@@ -42,18 +56,39 @@ export interface ButtonType extends Block {
   lineHeight: number;
   borderRadius: number;
   backgroudColor: string;
-  disabled: boolean; // default false
+  disabled: boolean;
   color: string;
   hoverBackgroundColor: string;
   hoverColor: string;
   disabledBackgroundColor: string;
   disabledColor: string;
-  canChangeState: boolean;
 }
 
-interface ModalType extends Block {
-  // 모달은 container와 image와 button을 조합해서 만들 수 있음
+export interface ModalType extends Block {
   type: 'modal';
+  image: ModalImageType;
+  buttons: ModalButtonType[];
+}
+
+interface ModalImageType {
+  url: string;
+  width: number;
+  height: number;
+}
+
+interface ModalButtonType {
+  text: string;
+  fontSize: number;
+  fontWeight: number;
+  lineHeight: number;
+  borderRadius: number;
+  backgroudColor: string;
+  disabled: boolean;
+  color: string;
+  hoverBackgroundColor: string;
+  hoverColor: string;
+  disabledBackgroundColor: string;
+  disabledColor: string;
 }
 
 interface SnackbarType extends Block {
@@ -66,22 +101,22 @@ interface CarouselType extends Block {
 }
 
 // Event
-interface Event {
+export interface Event {
   eventId: number;
   blockId: number;
   condition: number[];
-  conditionAction: {
-    true: ConditionAction;
-    false: ConditionAction;
+  conditionAction?: {
+    true?: ConditionAction;
+    false?: ConditionAction;
   };
 }
 
-interface ConditionAction {
-  firstActionId: number;
-  secondActionId: number;
+export interface ConditionAction {
+  actionId: number;
+  afterActionId?: number;
 }
 
-interface ClickEvent extends Event {
+export interface ClickEvent extends Event {
   type: 'click';
   action: number[];
 }
@@ -94,7 +129,7 @@ interface Condition {
   blockId?: number;
 }
 
-interface TrueCondition extends Condition {
+export interface TrueCondition extends Condition {
   type: 'true';
 }
 
@@ -151,4 +186,9 @@ interface SnackbarAction extends Action {
 interface ModalSnackbarAction extends Action {
   modalUrl: '';
   snackbarMessage: '';
+}
+
+interface OpenURLAction extends Action {
+  type: 'openUrl';
+  url: string;
 }

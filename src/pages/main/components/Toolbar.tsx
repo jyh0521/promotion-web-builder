@@ -1,4 +1,4 @@
-import { LineOutlined, PictureOutlined, PlusSquareOutlined } from '@ant-design/icons';
+import { LineOutlined, NotificationOutlined, PictureOutlined, PlusSquareOutlined } from '@ant-design/icons';
 import styled from '@emotion/styled';
 import { usePromotionStore } from '../../../store/usePromotionStore';
 import { useSelectedBlockIdStore } from '@/store/useSelectedBlockIdStore';
@@ -7,13 +7,16 @@ import { useEffect, useState } from 'react';
 export const Toolbar = () => {
   const { promotion, addImage, addButton } = usePromotionStore();
   const { selectedBlockId } = useSelectedBlockIdStore();
-  const [isDisabled, setIsDisabled] = useState(true);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+  const [isNotificationDisabled, setIsNotificationDisabled] = useState(true);
 
   useEffect(() => {
     if (selectedBlockId) {
-      setIsDisabled(!(promotion.blocks[selectedBlockId]?.type === 'image'));
+      setIsButtonDisabled(!(promotion.blocks[selectedBlockId]?.type === 'image'));
+      setIsNotificationDisabled(!(promotion.blocks[selectedBlockId]?.type === 'button'));
     } else {
-      setIsDisabled(true);
+      setIsButtonDisabled(true);
+      setIsNotificationDisabled(true);
     }
   }, [selectedBlockId]);
 
@@ -25,15 +28,18 @@ export const Toolbar = () => {
       <ToolbarButton onClick={addImage}>
         <PictureOutlined style={{ fontSize: 24 }} />
       </ToolbarButton>
-      <ToolbarButton disabled={isDisabled} onClick={() => addButton(selectedBlockId as number)}>
+      <ToolbarButton disabled={isButtonDisabled} onClick={() => addButton(selectedBlockId as number)}>
         <PlusSquareOutlined style={{ fontSize: 24 }} />
       </ToolbarButton>
+      {/* <ToolbarButton disabled={isNotificationDisabled} onClick={() => addModal(selectedBlockId as number)}>
+        <NotificationOutlined style={{ fontSize: 24 }} />
+      </ToolbarButton> */}
     </ToolbarContainer>
   );
 };
 
 const ToolbarContainer = styled.div`
-  width: 180px;
+  /* width: 180px; */
   height: 48px;
   background-color: #00bed6;
 

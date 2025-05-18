@@ -1,12 +1,10 @@
-import { ButtonType } from '@/common/types';
-import { usePromotionStore } from '@/store/usePromotionStore';
-import { useSelectedBlockIdStore } from '@/store/useSelectedBlockIdStore';
-import styled from '@emotion/styled';
 import { Descriptions, Input, InputNumber } from 'antd';
+import { ButtonOptionsContainer } from './ButtonOptionsContainer';
+import { usePromotionStore } from '@/store/usePromotionStore';
+import { ButtonType } from '@/common/types';
 
-export const ButtonOptions = () => {
+export const DesignOption = ({ selectedBlockId }: { selectedBlockId: number }) => {
   const { promotion, updateButton } = usePromotionStore();
-  const { selectedBlockId } = useSelectedBlockIdStore();
 
   if (!selectedBlockId) return null;
 
@@ -200,12 +198,3 @@ export const ButtonOptions = () => {
     </ButtonOptionsContainer>
   );
 };
-
-const ButtonOptionsContainer = styled.div`
-  width: 100%;
-
-  display: flex;
-  flex-direction: column;
-
-  gap: 24px;
-`;
