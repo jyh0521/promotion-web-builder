@@ -2,8 +2,6 @@ import { create } from 'zustand';
 import { produce } from 'immer';
 import {
   ButtonType,
-  ClickEvent,
-  ConditionAction,
   ContainerType,
   Event,
   ImageType,
@@ -22,7 +20,7 @@ interface PromotionStore {
   // addModal: (selectedBlockId: number) => void;
   addClickEvent: (state: PromotionStore, blockId: number) => number;
   addTrueConditionToEvent: (eventId: number, blockId: number, state: any) => void;
-  getEventsByBlockId: (selectedBlockId: number) => PromotionType['events'];
+  getEventsByBlockId: (selectedBlockId: number) => Event[];
   addOpenUrlAction: ({ eventId, url, trueAction }: { eventId: number; url: string; trueAction: boolean }) => void;
 }
 
@@ -79,10 +77,6 @@ export const usePromotionStore = create<PromotionStore>((set) => ({
       blockId,
       type: 'click',
       condition: [],
-      // conditionAction: {
-      //   true: {} as ConditionAction,
-      //   false: {} as ConditionAction,
-      // },
       action: [],
     };
 
@@ -182,54 +176,6 @@ export const usePromotionStore = create<PromotionStore>((set) => ({
       }),
     ),
 
-  // insertTrueCondition: (eventId: number, conditionId: number) => {
-  //   set(
-  //     produce((state) => {
-  //       state.promotion.events[eventId].condition.push(conditionId);
-  //     }),
-  //   );
-  // },
-
-  // addModal: (selectedBlockId: number) => {
-  //   set(
-  //     produce((state) => {
-  //       const newId = Object.keys(state.promotion.blocks).length + 1;
-
-  //       state.promotion.blocks[newId] = {
-  //         blockId: newId,
-  //         type: 'modal',
-  //         nodes: [newId + 1],
-  //       } as ModalType;
-
-  //       state.promotion.blocks[newId + 1] = {
-  //         blockId: newId + 1,
-  //         type: 'image',
-  //         url: '/images/test.png',
-  //         width: 390,
-  //         height: 500,
-  //         nodes: [newId + 2, newId + 3],
-  //       } as ImageType;
-
-  //       state.promotion.blocks[newId + 2] = {
-  //         blockId: newId + 2,
-  //         type: 'button',
-  //         text: 'ModalButton',
-  //         width: 308,
-  //         height: 50,
-  //       } as ButtonType;
-
-  //       state.promotion.blocks[newId + 3] = {
-  //         blockId: newId + 3,
-  //         type: 'button',
-  //         text: 'ModalButton',
-  //         width: 308,
-  //         height: 50,
-  //       } as ButtonType;
-
-  //       (state.promotion.blocks[selectedBlockId] as ContainerType).nodes = [newId];
-  //     }),
-  //   );
-  // },
   addModal: (selectedBlockId: number) => {
     set(
       produce((state) => {
@@ -251,7 +197,11 @@ export const usePromotionStore = create<PromotionStore>((set) => ({
     );
   },
 
-  getEventsByBlockId: (selectedBlockId: number): PromotionType['events'] => {
-    return usePromotionStore.getState().promotion.events;
+  getEventsByBlockId: (selectedBlockId: number): Event[] => {
+    const events = Object.values(usePromotionStore.getState().promotion.events).filter(
+      (event) => event.blockId === selectedBlockId,
+    );
+
+    return events;
   },
 }));
