@@ -22,7 +22,7 @@ export const FeatureOption = ({ selectedBlockId }: { selectedBlockId: number }) 
                 <Select.Option value="none">없음</Select.Option>
               </Select>
             </Descriptions.Item>
-            <Descriptions.Item label="true 액션">
+            <Descriptions.Item label="조건 성공 액션">
               <Select defaultValue="openUrl" disabled>
                 <Select.Option value="none">없음</Select.Option>
                 <Select.Option value="couponDownload">쿠폰 다운</Select.Option>
@@ -41,25 +41,21 @@ export const FeatureOption = ({ selectedBlockId }: { selectedBlockId: number }) 
                 }}
               />
             </Descriptions.Item>
-            <Descriptions.Item label="true 액션 결과">
-              <Select defaultValue="none">
+            <Descriptions.Item label="조건 성공 액션 결과">
+              <Select defaultValue="none" disabled>
                 <Select.Option value="none">없음</Select.Option>
-                <Select.Option value="modal">모달</Select.Option>
               </Select>
             </Descriptions.Item>
             {event.conditionAction?.false !== undefined && (
               <>
-                <Descriptions.Item label="false 액션">
+                <Descriptions.Item label="조건 실패 액션">
                   <Select defaultValue="none">
                     <Select.Option value="none">없음</Select.Option>
-                    <Select.Option value="couponDownload">쿠폰 다운</Select.Option>
-                    <Select.Option value="alert">얼럿</Select.Option>
                   </Select>
                 </Descriptions.Item>
-                <Descriptions.Item label="false 액션 결과">
+                <Descriptions.Item label="조건 실패 액션 결과">
                   <Select defaultValue="none">
                     <Select.Option value="none">없음</Select.Option>
-                    <Select.Option value="modal">모달</Select.Option>
                   </Select>
                 </Descriptions.Item>
               </>
