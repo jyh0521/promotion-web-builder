@@ -1,7 +1,6 @@
 import { Descriptions, Input, InputNumber } from 'antd';
-import { ButtonOptionsContainer } from './ButtonnOptionsContainer';
+import { ButtonOptionsContainer } from './ButtonOptionsContainer';
 import { usePromotionStore } from '@/store/usePromotionStore';
-import { useSelectedBlockIdStore } from '@/store/useSelectedBlockIdStore';
 import { ButtonType } from '@/common/types';
 
 export const DesignOption = ({ selectedBlockId }: { selectedBlockId: number }) => {

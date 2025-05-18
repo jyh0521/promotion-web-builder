@@ -1,4 +1,4 @@
-import { ButtonOptionsContainer } from './ButtonnOptionsContainer';
+import { ButtonOptionsContainer } from './ButtonOptionsContainer';
 import { usePromotionStore } from '@/store/usePromotionStore';
 import { Descriptions, Input, Select } from 'antd';
 
