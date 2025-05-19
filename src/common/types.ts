@@ -118,7 +118,6 @@ export interface ConditionAction {
 
 export interface ClickEvent extends Event {
   type: 'click';
-  action: number[];
 }
 
 // Condition

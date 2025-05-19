@@ -1,14 +1,6 @@
 import { create } from 'zustand';
 import { produce } from 'immer';
-import {
-  ButtonType,
-  ContainerType,
-  Event,
-  ImageType,
-  ModalType,
-  PromotionType,
-  TrueCondition,
-} from '@/common/types';
+import { ButtonType, ContainerType, Event, ImageType, ModalType, PromotionType, TrueCondition } from '@/common/types';
 
 interface PromotionStore {
   promotion: PromotionType;
@@ -77,7 +69,6 @@ export const usePromotionStore = create<PromotionStore>((set) => ({
       blockId,
       type: 'click',
       condition: [],
-      action: [],
     };
 
     (state.promotion.blocks[blockId] as ContainerType).events?.push(eventId);
@@ -107,9 +98,9 @@ export const usePromotionStore = create<PromotionStore>((set) => ({
           actionId = Object.keys(state.promotion.actions).length + 1;
         } else {
           if (trueAction) {
-            actionId = event.conditionAction?.true?.actionId ?? 0;
+            actionId = event.conditionAction?.true?.actionId ?? Object.keys(state.promotion.actions).length + 1;
           } else {
-            actionId = event.conditionAction?.false?.actionId ?? 0;
+            actionId = event.conditionAction?.false?.actionId ?? Object.keys(state.promotion.actions).length + 1;
           }
         }
 
